@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 public class LoginInterceptor implements HandlerInterceptor {
 
     /**
-     * 预处理方法：在Controller方法执行之前调用
+     * 预处理方法：在Controller方法执行之前调用1
      * @param request 请求对象，用于获取请求信息、Session等
      * @param response 响应对象，用于返回结果、重定向等
      * @param handler 处理器对象（即Controller中的方法）
