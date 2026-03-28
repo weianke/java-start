@@ -47,6 +47,13 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>1.6.15</version> <!-- 兼容 Spring Boot 2.7.x -->
+        </dependency>
+
     </dependencies>
 
     <!-- ====================== 阿里云镜像（下载飞快） ====================== -->
