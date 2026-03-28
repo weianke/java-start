@@ -26,6 +26,6 @@ public class LoginInterceptor implements HandlerInterceptor {
 
         // 目前返回false，表示拦截所有请求，不放行
         // 后续可在这里添加登录判断逻辑：已登录返回true，未登录返回false并跳转到登录页
-        return false;
+        return true;
     }
 }
