@@ -1,5 +1,6 @@
 package com.example.helloworld.entity;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -9,7 +10,14 @@ import lombok.Data;
  */
 @Data // 自动生成 getter/setter/toString/equals/hashCode 等方法
 @Schema(description = "用户实体")
+@TableName("user") // 加这个！对应数据库表名
 public class User {
+
+    /**
+     * id
+     */
+    @Schema(description = "id")
+    private Long id;
 
     /**
      * 用户名

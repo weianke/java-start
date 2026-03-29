@@ -6,8 +6,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/user")
-@Tag(name = "用户模块")
+@RequestMapping("/testUser")
+@Tag(name = "测试案例用户模块")
 public class UserController {
 
     @Operation(summary = "根据ID获取用户") // 接口说明

@@ -2,6 +2,7 @@
 package com.example.helloworld;
 
 // 导入 SpringBoot 启动核心类
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 // 导入 SpringBoot 自动配置注解
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,6 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * 整个项目运行的起点
  */
 @SpringBootApplication  // 核心注解：标记这是一个 SpringBoot 应用，开启自动配置
+@MapperScan("com.example.helloworld.mapper")
 public class HelloworldApplication {
 
     // Java 程序固定入口：main 方法
