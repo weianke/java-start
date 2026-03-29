@@ -1,5 +1,7 @@
 package com.example.helloworld.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.example.helloworld.common.result.Result;
 import com.example.helloworld.dto.UserDTO;
 import com.example.helloworld.entity.User;
 import com.example.helloworld.mapper.UserMapper;
@@ -22,15 +24,15 @@ public class loginUserController {
 
     @Operation(summary = "查询用户") // 接口说明
     @GetMapping("/queryUser")
-    public List<User> query() {
-        List<User> list = userMapper.selectList(null);
+    public Result<List<User>> query() {
+        List<User> list = userMapper.selectList(new QueryWrapper<>());
         System.out.println(list);
-        return list;
+        return Result.success(list);
     }
 
     @Operation(summary = "新增用户")
     @PostMapping("/add")
-    public String save(@Valid @RequestBody UserDTO dto) {
+    public Result<String> save(@Valid @RequestBody UserDTO dto) {
         // DTO 转实体
         User user = new User();
         user.setUsername(dto.getUsername());
@@ -39,7 +41,7 @@ public class loginUserController {
         user.setToken(JwtUtil.createToken(dto.getUsername()));
 
         userMapper.insert(user);
-        return "新增成功";
+        return Result.success(null);
     }
 
 
