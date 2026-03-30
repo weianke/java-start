@@ -1,7 +1,9 @@
 package com.example.helloworld.common.result;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.Data;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 大厂标准 RESTful 全局返回体
@@ -49,19 +51,18 @@ public class Result<T> implements Serializable {
         return result;
     }
 
-    // ====================== 分页专用（平级格式） ======================
-    public static <T> Result<T> pageSuccess(T data, Long total, Long size, Long current, Long pages) {
-        Result<T> result = new Result<>();
+    // ====================== ✅ 优化：极简分页方法（修复泛型） ======================
+    public static <E> Result<List<E>> pageSuccess(IPage<E> page) {
+        Result<List<E>> result = new Result<>();
         result.setCode(ResultCode.SUCCESS.getCode());
         result.setMessage(ResultCode.SUCCESS.getMessage());
-        result.setData(data);
-        result.setTotal(total);
-        result.setSize(size);
-        result.setCurrent(current);
-        result.setPages(pages);
+        result.setData(page.getRecords()); // 现在 List<E> 完美匹配 Result<List<E>>
+        result.setTotal(page.getTotal());
+        result.setSize(page.getSize());
+        result.setCurrent(page.getCurrent());
+        result.setPages(page.getPages());
         return result;
     }
-
     // ====================== 失败返回 ======================
     public static <T> Result<T> error(ResultCode resultCode) {
         Result<T> result = new Result<>();

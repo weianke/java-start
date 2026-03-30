@@ -31,11 +31,7 @@ public class OrderController {
     public Result<List<Order>> page(@RequestBody PageQuery query) {
         IPage<Order> page = PageUtil.page(query, orderMapper);
         return Result.pageSuccess(
-                page.getRecords(),
-                page.getTotal(),
-                page.getSize(),
-                page.getCurrent(),
-                page.getPages()
+                page
         );
     }
 
