@@ -17,7 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/user")
 @Tag(name = "用户模块")
-public class loginUserController {
+public class LoginUserController {
 
     @Autowired
     private UserMapper userMapper;
@@ -44,5 +44,12 @@ public class loginUserController {
         return Result.success(null);
     }
 
+    // 查询所有用户及其订单
+    @Operation(summary = "查询用户所有订单")
+    @GetMapping("/{userId}")
+    public Result<List<User>> getAllUserAndOrders(@PathVariable Long userId) {
+        List<User> userList = userMapper.selectUserAndOrdersByUserId(userId);
+        return Result.success(userList);
+    }
 
 }
