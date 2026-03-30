@@ -16,8 +16,4 @@ public interface UserMapper extends BaseMapper<User> {
     // 这里 什么都不用写！！！
     // 原来的 @Select @Insert 全部删掉！！！
     // 字段？SQL？全都不用写！！！
-
-    // 保留原来的查询方法
-    @Select("select * from `user`")
-    List<User> find();
 }
