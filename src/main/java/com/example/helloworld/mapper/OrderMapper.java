@@ -19,7 +19,7 @@ public interface OrderMapper extends BaseMapper<Order> {
     @Results(
             {
                     @Result(column = "id",property = "id"),
-                    @Result(column = "orderTime",property = "orderTime"),
+                    @Result(column = "order_time",property = "orderTime"),
                     @Result(column = "total",property = "total"),
                     @Result(column = "uid",property = "uid"),
                     @Result(column = "uid",property = "user",javaType = User.class,
