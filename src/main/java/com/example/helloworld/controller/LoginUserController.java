@@ -12,18 +12,65 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/user")
+
 @Tag(name = "用户模块")
 public class LoginUserController {
 
     @Autowired
     private UserMapper userMapper;
 
+
+    @Operation(summary = "用户登录")
+    @PostMapping("/login")
+    public Result<Map<String, Object>> login(@Valid @RequestBody UserDTO dto) {
+
+        String username = dto.getUsername();
+        String password = dto.getPassword();
+
+        // 1. 前端只传了 username + password，只能用 username 查询
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("username", username);
+        List<User> userList = userMapper.selectList(queryWrapper);
+
+        if (userList.isEmpty()) {
+            return Result.error(400, "用户不存在");
+        }
+
+        // 2. 匹配密码，找到唯一用户
+        User loginUser = null;
+        // 流式查找：用户名 + 密码 同时匹配
+        if (username != null && password != null) {
+            loginUser = userList.stream()
+                    .filter(user -> username.equals(user.getUsername())
+                            && password.equals(user.getPassword()))
+                    .findFirst()
+                    .orElse(null);
+        }
+
+        if (loginUser == null) {
+            return Result.error(400, "密码错误");
+        }
+
+        // 3. 拿到唯一 id → 生成 token
+        String token = JwtUtil.createToken(loginUser.getId().toString());
+
+        // 4. 返回 id 作为唯一标识
+        Map<String, Object> map = new HashMap<>();
+        map.put("userId", loginUser.getId());
+        map.put("username", loginUser.getUsername());
+        map.put("password", loginUser.getPassword());
+        map.put("token", token);
+
+        return Result.success(map);
+    }
+
     @Operation(summary = "查询用户") // 接口说明
-    @GetMapping("/queryUser")
+    @GetMapping("/user/queryUser")
     public Result<List<User>> query() {
         List<User> list = userMapper.selectList(new QueryWrapper<>());
         System.out.println(list);
@@ -31,13 +78,12 @@ public class LoginUserController {
     }
 
     @Operation(summary = "新增用户")
-    @PostMapping("/add")
+    @PostMapping("/user/add")
     public Result<String> save(@Valid @RequestBody UserDTO dto) {
         // DTO 转实体
         User user = new User();
         user.setUsername(dto.getUsername());
         user.setPassword(dto.getPassword());
-        user.setCode(dto.getCode());
         user.setToken(JwtUtil.createToken(dto.getUsername()));
 
         userMapper.insert(user);
@@ -46,7 +92,7 @@ public class LoginUserController {
 
     // 查询所有用户及其订单
     @Operation(summary = "查询用户所有订单")
-    @GetMapping("/{userId}")
+    @GetMapping("user/{userId}")
     public Result<List<User>> getAllUserAndOrders(@PathVariable Long userId) {
         List<User> userList = userMapper.selectUserAndOrdersByUserId(userId);
         return Result.success(userList);

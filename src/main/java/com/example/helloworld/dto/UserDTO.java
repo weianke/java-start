@@ -14,7 +14,4 @@ public class UserDTO {
     @NotBlank(message = "密码不能为空")
     @Size(min = 6, max = 32, message = "密码长度必须在6-32位")
     private String password;
-
-    @NotBlank(message = "验证码不能为空")
-    private String code;
 }

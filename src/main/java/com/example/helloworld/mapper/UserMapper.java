@@ -23,7 +23,6 @@ public interface UserMapper extends BaseMapper<User> {
                     @Result(column = "id",property = "id"),
                     @Result(column = "username", property = "username"),
                     @Result(column = "password", property = "password"),
-                    @Result(column = "code", property = "code"),
                     // 关键：通过用户id查询订单，并映射到orders字段
                     @Result(
                             column = "id", // 传入的列名：用户id
@@ -41,7 +40,6 @@ public interface UserMapper extends BaseMapper<User> {
             @Result(column = "id", property = "id"),
             @Result(column = "username", property = "username"),
             @Result(column = "password", property = "password"),
-            @Result(column = "code", property = "code"),
             @Result(
                     column = "id",
                     property = "orders",

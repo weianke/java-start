@@ -1,26 +1,30 @@
 package com.example.helloworld.config;
 
+import com.example.helloworld.interceptor.JwtInterceptor;
 import com.example.helloworld.interceptor.LoginInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-/**
- * Spring MVC 配置类
- * 作用：配置拦截器、跨域、视图解析器等 Web 相关设置
- * Configuration 标记这是一个配置类，Spring 启动时会自动加载
- */
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    /**
-     * 添加自定义拦截器
-     * @param registry 拦截器注册器，用来注册拦截器
-     */
+    // 一个类里只能有一个 addInterceptors 方法！
+    // 两个拦截器在这里统一注册
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        // 1. 注册 LoginInterceptor 拦截器
-        // 2. addPathPatterns("/user/**")：只拦截 /user/ 开头的所有请求
+
+        // 1. 全局 JWT 拦截器：校验所有接口（除了登录/刷新）
+        registry.addInterceptor(new JwtInterceptor())
+                .addPathPatterns("/**")
+                .excludePathPatterns(
+                        "/login",
+                        "/refreshToken",
+                        "/error",
+                        "/static/**"
+                );
+
+        // 2. 登录拦截器：只拦截 /user/** 路径
         registry.addInterceptor(new LoginInterceptor())
                 .addPathPatterns("/user/**");
     }

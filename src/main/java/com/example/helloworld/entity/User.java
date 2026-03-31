@@ -37,11 +37,6 @@ public class User {
     @Schema(description = "密码")
     private String password;
 
-    /**
-     * 验证码
-     */
-    @Schema(description = "验证码")
-    private String code;
 
     /**
      * 登录成功后返回的 Token
