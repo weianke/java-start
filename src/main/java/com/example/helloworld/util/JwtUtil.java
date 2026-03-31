@@ -4,6 +4,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import java.security.Key;
 import java.util.Date;
+import java.util.Map;
 
 public class JwtUtil {
 
@@ -44,16 +45,8 @@ public class JwtUtil {
      * 从 Token 获取用户名
      */
     public static String getUsername(String token) {
-        try {
-            return Jwts.parserBuilder()
-                    .setSigningKey(KEY)
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody()
-                    .getSubject();
-        } catch (JwtException e) {
-            return null;
-        }
+        Claims claims = parseAllClaims(token);
+        return claims != null ? claims.getSubject() : null;
     }
 
     /**
@@ -70,5 +63,52 @@ public class JwtUtil {
             // 捕获所有JWT相关异常（过期、签名错误等）
             return false;
         }
+    }
+
+    // ====================== 新增：完整解析Token的方法 ======================
+
+    /**
+     * 解析Token，获取所有载荷信息(Claims)
+     * @param token 前端传入的token
+     * @return Claims 包含所有信息，解析失败返回null
+     */
+    public static Claims parseAllClaims(String token) {
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(KEY)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (JwtException | IllegalArgumentException e) {
+            // 解析失败（签名错误、过期、格式非法）
+            return null;
+        }
+    }
+
+    /**
+     * 获取Token签发时间
+     */
+    public static Date getIssuedAt(String token) {
+        Claims claims = parseAllClaims(token);
+        return claims != null ? claims.getIssuedAt() : null;
+    }
+
+    /**
+     * 获取Token过期时间
+     */
+    public static Date getExpiration(String token) {
+        Claims claims = parseAllClaims(token);
+        return claims != null ? claims.getExpiration() : null;
+    }
+
+    /**
+     * 获取Token中自定义字段（通用方法）
+     * @param token token
+     * @param key 自定义字段名
+     * @return 字段值
+     */
+    public static <T> T getClaim(String token, String key) {
+        Claims claims = parseAllClaims(token);
+        return claims != null ? (T) claims.get(key) : null;
     }
 }
