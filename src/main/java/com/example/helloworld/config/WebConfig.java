@@ -19,13 +19,14 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**")
                 .excludePathPatterns(
                         "/login",
+                        "/user/info",   // <-- 必须放行！
+                        "/user/add",
                         "/refreshToken",
                         "/error",
-                        "/static/**"
+                        "/static/**",
+                        "/v3/api-docs/**",
+                        "/swagger-ui/**",
+                        "/swagger-ui.html"
                 );
-
-        // 2. 登录拦截器：只拦截 /user/** 路径
-        registry.addInterceptor(new LoginInterceptor())
-                .addPathPatterns("/user/**");
     }
 }

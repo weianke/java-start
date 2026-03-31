@@ -57,7 +57,7 @@ public class LoginUserController {
         }
 
         // 3. 拿到唯一 id → 生成 token
-        String token = JwtUtil.createToken(loginUser.getId().toString());
+        String token = JwtUtil.createToken(loginUser.getUsername());
 
         // 4. 返回 id 作为唯一标识
         Map<String, Object> map = new HashMap<>();
@@ -65,6 +65,33 @@ public class LoginUserController {
         map.put("username", loginUser.getUsername());
         map.put("password", loginUser.getPassword());
         map.put("token", token);
+
+        return Result.success(map);
+    }
+
+    @Operation(summary = "获取用户信息")
+    @GetMapping("/user/info")
+    public Result<Map<String, Object>> info(@RequestParam String token) {
+        // 第一步：校验 token 是否有效
+        boolean isValid = JwtUtil.validateToken(token);
+        System.out.println("token 是否有效：" + isValid);
+
+        if (!isValid) {
+            return Result.error(401, "token无效或已过期");
+        }
+
+        // 第二步：解析用户名
+        String username = JwtUtil.getUsername(token);
+        System.out.println("解析出来的用户名：" + username);
+
+        if (username == null) {
+            return Result.error(401, "无法解析用户名");
+        }
+
+        String avatar = "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif";
+        Map<String, Object> map = new HashMap<>();
+        map.put("username", username);
+        map.put("avatar", avatar);
 
         return Result.success(map);
     }
