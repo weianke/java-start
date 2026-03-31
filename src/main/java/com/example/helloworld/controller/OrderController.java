@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.example.helloworld.common.result.ResultCode.PARAM_ERROR;
+
 @RestController
 @RequestMapping("/order")
 @Tag(name = "订单模块")
@@ -50,13 +52,13 @@ public class OrderController {
     @PostMapping("/add")
     public Result<Void> add(@RequestBody Order order) {
         if (order.getUid() == null) {
-            return Result.error(500, "用户ID不能为空");
+            return Result.error(PARAM_ERROR);
         }
 
         // 2. 校验用户是否存在（核心！）
         User existUser = userMapper.selectById(order.getUid());
         if (existUser == null) {
-            return Result.error(500, "用户不存在，无法创建订单");
+            return Result.error(400, "用户id不存在");
         }
 
         // 3. 用户存在 → 插入订单
