@@ -69,6 +69,12 @@ public class LoginUserController {
         return Result.success(map);
     }
 
+    @Operation(summary = "退出登录")
+    @PostMapping("/logout")
+    public Result<String> logout() {
+        return Result.success("退出登录成功");
+    }
+
     @Operation(summary = "获取用户信息")
     @GetMapping("/user/info")
     public Result<Map<String, Object>> info(@RequestParam String token) {

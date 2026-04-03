@@ -19,9 +19,6 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**")
                 .excludePathPatterns(
                         "/login",
-                        "/user/info",   // <-- 必须放行！
-                        "/user/add",
-                        "/refreshToken",
                         "/error",
                         "/static/**",
                         "/v3/api-docs/**",
