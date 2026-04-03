@@ -123,12 +123,21 @@ public class LoginUserController {
         return Result.success(null);
     }
 
-    // 查询所有用户及其订单
-    @Operation(summary = "查询用户所有订单")
-    @GetMapping("user/{userId}")
-    public Result<List<User>> getAllUserAndOrders(@PathVariable Long userId) {
+    // 查询某个用户及其订单
+    @Operation(summary = "查询某个用户所有订单")
+    @GetMapping("/user/{userId}")
+    public Result<List<User>> getAllUserAndOrdersById(@PathVariable Long userId) {
         List<User> userList = userMapper.selectUserAndOrdersByUserId(userId);
         return Result.success(userList);
     }
 
+
+    @Operation(summary = "查询所有用户包含订单")
+    @GetMapping("/user/getAllUserAndOrders")
+    public Result<List<User>> getAllUserAndOrders() {
+        // 加这行日志
+        System.out.println("========= getAllUserAndOrders 接口已执行 =========");
+        List<User> userList = userMapper.selectAllUserAndOrders();
+        return Result.success(userList);
+    }
 }

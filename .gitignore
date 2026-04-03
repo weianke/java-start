@@ -34,3 +34,4 @@ build/
 
 ### config ###
 application-dev.properties
+application-prod.properties
